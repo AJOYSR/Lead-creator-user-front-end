@@ -1,4 +1,10 @@
 [[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/api-proxy/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
   from = "/test"
   to = "/.netlify/functions/test"
   status = 200
