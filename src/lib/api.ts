@@ -2,10 +2,15 @@
 import axios from "axios";
 import { User } from "../types/user";
 
+// Use the relative path from the environment variable
 const baseURL = import.meta.env.VITE_API_BASE_URL;
+console.log("🚀 ~ baseURL:", baseURL);
 
+// Create axios instance with the baseURL
 const api = axios.create({
 	baseURL: baseURL,
+	// Add withCredentials to handle cookies if needed
+	withCredentials: true,
 });
 
 export const getUsers = async (): Promise<User[]> => {
