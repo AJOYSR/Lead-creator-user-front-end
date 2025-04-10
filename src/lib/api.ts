@@ -4,7 +4,6 @@ import { User } from "../types/user";
 
 // Use the environment variable for API URL
 const baseURL = import.meta.env.VITE_API_URL;
-console.log("🚀 ~ API URL:", baseURL);
 
 // Create axios instance with the baseURL
 const api = axios.create({
@@ -16,8 +15,6 @@ const api = axios.create({
 // Add request interceptor for debugging
 api.interceptors.request.use(
 	(config) => {
-		console.log("🚀 ~ Request URL:", config.url);
-		console.log("🚀 ~ Full URL:", `${config.baseURL}${config.url}`);
 		return config;
 	},
 	(error) => {
