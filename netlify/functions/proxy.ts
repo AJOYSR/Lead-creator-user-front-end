@@ -22,6 +22,7 @@ export const handler: Handler = async (event) => {
 			data: body,
 			headers,
 			validateStatus: () => true, // Don't throw on any status code
+			timeout: 30000, // 30 seconds timeout
 		});
 
 		// Convert headers to a format compatible with Netlify Functions
@@ -45,7 +46,10 @@ export const handler: Handler = async (event) => {
 		console.error("Proxy error:", error);
 		return {
 			statusCode: 500,
-			body: JSON.stringify({ error: "Internal Server Error" }),
+			body: JSON.stringify({
+				error: "Internal Server Error",
+				details: error.message,
+			}),
 		};
 	}
 };
