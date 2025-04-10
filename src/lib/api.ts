@@ -13,6 +13,18 @@ const api = axios.create({
 	withCredentials: true,
 });
 
+// Add request interceptor for debugging
+api.interceptors.request.use(
+	(config) => {
+		console.log("🚀 ~ Request URL:", config.url);
+		console.log("🚀 ~ Full URL:", `${config.baseURL}${config.url}`);
+		return config;
+	},
+	(error) => {
+		return Promise.reject(error);
+	}
+);
+
 export const getUsers = async (): Promise<User[]> => {
 	const response = await api.get("/users");
 	return response.data?.data;

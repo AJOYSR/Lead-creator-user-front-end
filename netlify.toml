@@ -2,4 +2,16 @@
   from = "/api/*"
   to = "/.netlify/functions/proxy/:splat"
   status = 200
+  force = true
+
+[[redirects]]
+  from = "/test"
+  to = "/.netlify/functions/test"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/test.html"
+  to = "/test.html"
+  status = 200
   force = true 
