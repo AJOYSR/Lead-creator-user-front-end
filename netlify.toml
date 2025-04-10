@@ -1,17 +1,10 @@
 [[redirects]]
   from = "/api/*"
-  to = "/.netlify/functions/api-proxy/:splat"
+  to = "http://172.18.101.27:4050/api/:splat"
   status = 200
   force = true
 
 [[redirects]]
-  from = "/test"
-  to = "/.netlify/functions/test"
+  from = "/*"
+  to = "/index.html"
   status = 200
-  force = true
-
-[[redirects]]
-  from = "/test.html"
-  to = "/test.html"
-  status = 200
-  force = true 
