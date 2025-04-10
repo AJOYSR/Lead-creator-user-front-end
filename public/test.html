@@ -196,7 +196,10 @@
 					);
 					const startTime = Date.now();
 					const response = await axios.get(
-						"http://172.18.101.27:4050/api/users"
+						"http://172.18.101.27:4050/api/users",
+						{
+							withCredentials: false,
+						}
 					);
 					const endTime = Date.now();
 					updateStatus(

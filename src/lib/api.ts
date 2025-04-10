@@ -9,8 +9,8 @@ console.log("🚀 ~ API URL:", baseURL);
 // Create axios instance with the baseURL
 const api = axios.create({
 	baseURL: baseURL,
-	// Add withCredentials to handle cookies if needed
-	withCredentials: true,
+	// Disable credentials for CORS requests
+	withCredentials: false,
 });
 
 // Add request interceptor for debugging
