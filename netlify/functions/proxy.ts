@@ -15,6 +15,8 @@ export const handler: Handler = async (event) => {
 		};
 
 		console.log(`Proxying ${method} request to ${API_URL}${path}`);
+		console.log("Request headers:", headers);
+		console.log("Request body:", body);
 
 		const response = await axios({
 			method,
@@ -24,6 +26,10 @@ export const handler: Handler = async (event) => {
 			validateStatus: () => true, // Don't throw on any status code
 			timeout: 30000, // 30 seconds timeout
 		});
+
+		console.log(`Response status: ${response.status}`);
+		console.log("Response headers:", response.headers);
+		console.log("Response data:", response.data);
 
 		// Convert headers to a format compatible with Netlify Functions
 		const responseHeaders: Record<string, string> = {
@@ -49,6 +55,15 @@ export const handler: Handler = async (event) => {
 			body: JSON.stringify({
 				error: "Internal Server Error",
 				details: error.message,
+				stack: error.stack,
+				config: error.config
+					? {
+							url: error.config.url,
+							method: error.config.method,
+							headers: error.config.headers,
+							timeout: error.config.timeout,
+					  }
+					: null,
 			}),
 		};
 	}

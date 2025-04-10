@@ -36,39 +36,119 @@
 			.success {
 				color: green;
 			}
+			.info {
+				color: blue;
+			}
+			.status {
+				margin: 10px 0;
+				padding: 10px;
+				border-radius: 4px;
+			}
+			.status.error {
+				background-color: #ffebee;
+			}
+			.status.success {
+				background-color: #e8f5e9;
+			}
+			.status.info {
+				background-color: #e3f2fd;
+			}
+			.details {
+				margin-top: 10px;
+				font-size: 0.9em;
+			}
 		</style>
 	</head>
 	<body>
 		<h1>API Test</h1>
-		<button onclick="testNetlifyFunction()">Test Netlify Function</button>
-		<button onclick="testApiProxy()">Test API Proxy</button>
-		<button onclick="testDirectApi()">Test Direct API</button>
+		<div>
+			<button onclick="testNetlifyFunction()">Test Netlify Function</button>
+			<button onclick="testApiProxy()">Test API Proxy</button>
+			<button onclick="testDirectApi()">Test Direct API</button>
+		</div>
 		<h2>Results:</h2>
+		<div id="status" class="status"></div>
 		<pre id="results">Click a button to test the API</pre>
-		<div id="status"></div>
 
 		<script>
+			function updateStatus(message, type = "info") {
+				const statusEl = document.getElementById("status");
+				statusEl.className = `status ${type}`;
+				statusEl.innerHTML = message;
+			}
+
+			function formatError(error) {
+				let errorDetails = "";
+
+				if (error.response) {
+					// The request was made and the server responded with a status code
+					// that falls out of the range of 2xx
+					errorDetails = `
+						<div class="details">
+							<strong>Status:</strong> ${error.response.status}<br>
+							<strong>Status Text:</strong> ${error.response.statusText}<br>
+							<strong>Headers:</strong> ${JSON.stringify(error.response.headers, null, 2)}<br>
+							<strong>Data:</strong> ${JSON.stringify(error.response.data, null, 2)}
+						</div>
+					`;
+				} else if (error.request) {
+					// The request was made but no response was received
+					errorDetails = `
+						<div class="details">
+							<strong>Request:</strong> ${JSON.stringify(error.request, null, 2)}
+						</div>
+					`;
+				} else {
+					// Something happened in setting up the request that triggered an Error
+					errorDetails = `
+						<div class="details">
+							<strong>Error:</strong> ${error.message}
+						</div>
+					`;
+				}
+
+				if (error.config) {
+					errorDetails += `
+						<div class="details">
+							<strong>Config:</strong><br>
+							URL: ${error.config.url}<br>
+							Method: ${error.config.method}<br>
+							Headers: ${JSON.stringify(error.config.headers, null, 2)}<br>
+							Timeout: ${error.config.timeout}ms
+						</div>
+					`;
+				}
+
+				return errorDetails;
+			}
+
 			async function testNetlifyFunction() {
 				try {
-					document.getElementById("status").innerHTML =
-						'<span class="success">Testing Netlify Function...</span>';
+					updateStatus(
+						'<span class="info">Testing Netlify Function...</span>',
+						"info"
+					);
 					const startTime = Date.now();
 					const response = await axios.get("/test");
 					const endTime = Date.now();
-					document.getElementById(
-						"status"
-					).innerHTML = `<span class="success">Netlify Function test completed in ${
-						endTime - startTime
-					}ms</span>`;
+					updateStatus(
+						`<span class="success">Netlify Function test completed in ${
+							endTime - startTime
+						}ms</span>`,
+						"success"
+					);
 					document.getElementById("results").textContent = JSON.stringify(
 						response.data,
 						null,
 						2
 					);
 				} catch (error) {
-					document.getElementById(
-						"status"
-					).innerHTML = `<span class="error">Netlify Function test failed: ${error.message}</span>`;
+					updateStatus(
+						`<span class="error">Netlify Function test failed: ${
+							error.message
+						}</span>${formatError(error)}`,
+						"error"
+					);
 					document.getElementById(
 						"results"
 					).textContent = `Error: ${error.message}`;
@@ -77,25 +157,31 @@
 
 			async function testApiProxy() {
 				try {
-					document.getElementById("status").innerHTML =
-						'<span class="success">Testing API Proxy...</span>';
+					updateStatus(
+						'<span class="info">Testing API Proxy...</span>',
+						"info"
+					);
 					const startTime = Date.now();
 					const response = await axios.get("/api/users");
 					const endTime = Date.now();
-					document.getElementById(
-						"status"
-					).innerHTML = `<span class="success">API Proxy test completed in ${
-						endTime - startTime
-					}ms</span>`;
+					updateStatus(
+						`<span class="success">API Proxy test completed in ${
+							endTime - startTime
+						}ms</span>`,
+						"success"
+					);
 					document.getElementById("results").textContent = JSON.stringify(
 						response.data,
 						null,
 						2
 					);
 				} catch (error) {
-					document.getElementById(
-						"status"
-					).innerHTML = `<span class="error">API Proxy test failed: ${error.message}</span>`;
+					updateStatus(
+						`<span class="error">API Proxy test failed: ${
+							error.message
+						}</span>${formatError(error)}`,
+						"error"
+					);
 					document.getElementById(
 						"results"
 					).textContent = `Error: ${error.message}`;
@@ -104,27 +190,33 @@
 
 			async function testDirectApi() {
 				try {
-					document.getElementById("status").innerHTML =
-						'<span class="success">Testing Direct API...</span>';
+					updateStatus(
+						'<span class="info">Testing Direct API...</span>',
+						"info"
+					);
 					const startTime = Date.now();
 					const response = await axios.get(
 						"http://172.18.101.27:4050/api/users"
 					);
 					const endTime = Date.now();
-					document.getElementById(
-						"status"
-					).innerHTML = `<span class="success">Direct API test completed in ${
-						endTime - startTime
-					}ms</span>`;
+					updateStatus(
+						`<span class="success">Direct API test completed in ${
+							endTime - startTime
+						}ms</span>`,
+						"success"
+					);
 					document.getElementById("results").textContent = JSON.stringify(
 						response.data,
 						null,
 						2
 					);
 				} catch (error) {
-					document.getElementById(
-						"status"
-					).innerHTML = `<span class="error">Direct API test failed: ${error.message}</span>`;
+					updateStatus(
+						`<span class="error">Direct API test failed: ${
+							error.message
+						}</span>${formatError(error)}`,
+						"error"
+					);
 					document.getElementById(
 						"results"
 					).textContent = `Error: ${error.message}`;

@@ -2,9 +2,9 @@
 import axios from "axios";
 import { User } from "../types/user";
 
-// Use the relative path from the environment variable
-const baseURL = import.meta.env.VITE_API_BASE_URL;
-console.log("🚀 ~ baseURL:", baseURL);
+// Use the environment variable for API URL
+const baseURL = import.meta.env.VITE_API_URL;
+console.log("🚀 ~ API URL:", baseURL);
 
 // Create axios instance with the baseURL
 const api = axios.create({
