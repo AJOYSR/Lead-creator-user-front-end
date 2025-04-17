@@ -14,6 +14,7 @@
     "@hookform/resolvers": "^3.3.2",
     "@netlify/functions": "^3.0.4",
     "@tanstack/react-query": "^5.8.4",
+    "@types/react-router-dom": "^5.3.3",
     "axios": "^1.6.2",
     "clsx": "^2.0.0",
     "dotenv": "^16.4.7",
@@ -21,6 +22,7 @@
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.48.2",
     "react-hot-toast": "^2.4.1",
+    "react-router-dom": "^7.5.0",
     "zod": "^3.22.4"
   },
   "devDependencies": {
