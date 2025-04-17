@@ -5,7 +5,7 @@ import { z } from "zod";
 const adminSchema = z.object({
 	email: z.string().email("Please enter a valid email address"),
 	password: z.string().min(6, "Password must be at least 6 characters"),
-	role: z.enum(["admin", "superadmin"]),
+	role: z.enum(["admin"]),
 });
 
 type AdminFormData = z.infer<typeof adminSchema>;
@@ -149,7 +149,6 @@ export function AdminForm({ onSubmit, onCancel }: AdminFormProps) {
 							className="block w-full pl-10 pr-3 py-2.5 border border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 rounded-md shadow-sm focus:outline-none sm:text-sm"
 						>
 							<option value="admin">Admin</option>
-							<option value="superadmin">Super Admin</option>
 						</select>
 					</div>
 				</div>
