@@ -1,19 +1,29 @@
 import { useState } from "react";
-import { useMutation } from "@tanstack/react-query";
-import { loginAdmin } from "../lib/api";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { loginAdmin, getAdminProfile } from "../lib/api";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 
 export const Login = () => {
 	const navigate = useNavigate();
+	const queryClient = useQueryClient();
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 
 	const loginMutation = useMutation({
 		mutationFn: () => loginAdmin(email, password),
-		onSuccess: () => {
-			toast.success("Login successful");
-			navigate("/");
+		onSuccess: async () => {
+			try {
+				// Fetch admin profile immediately after login
+				const adminProfile = await getAdminProfile();
+				// Set the admin profile data in the cache
+				queryClient.setQueryData(["adminProfile"], { admin: adminProfile });
+				toast.success("Login successful");
+				navigate("/");
+			} catch (error) {
+				toast.error("Failed to fetch admin profile");
+				navigate("/");
+			}
 		},
 		onError: (error: any) => {
 			toast.error(error.response?.data?.message || "Login failed");
